@@ -42,3 +42,8 @@ AD <- merge(disease_ct, florbetapir, by = c('RID','VISCODE'), all.x=TRUE, no.dup
 # MC baseline dataset processing
 transform_mc_ad <- subset(mc_bl, DX == 'Dementia', select=col) # MC into Dementia
 MCtoAD <- merge(transform_mc_ad, florbetapir, by = c('RID','VISCODE'), all.x=TRUE, no.dups=TRUE) # MC into DISEASE 
+
+# Save files
+write.csv(CN, path/control.csv, row.names=FALSE)
+write.csv(AD, path/disease.csv, row.names=FALSE)
+write.csv(MCtoAD, path/converted.csv, row.names=FALSE)
