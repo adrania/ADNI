@@ -1,0 +1,33 @@
+# LIBRARIES 
+install.packages('Hmisc')
+install.packages("/path/ADNIMERGE_0.0.1.tar.gz", repos = NULL, type = "source")
+
+library('Hmisc')
+library(ADNIMERGE)
+options(digits = 5)
+library(knitr)
+library(ggplot2)
+library(gridExtra)
+library(RColorBrewer)
+
+# ADNI dataset
+data <- adnimerge
+
+# Subset patients based on their base line diagnostic 
+# 5 levels of diagnosis DX.bl ('CN', 'SMC', 'EMCI', 'LMCI', 'AD')
+control_bl <- subset(data, DX.bl == 'CN' & VISCODE != 'bl')
+disease_bl <- subset(data, DX.bl == 'AD' & VISCODE != 'bl')
+mc_bl <- subset(data, (DX.bl == 'SMC' | DX.bl == 'EMCI' | DX.bl == 'LMCI') & VISCODE != 'bl')
+
+# Vector of interesting columns 
+col <- c('RID', 'VISCODE', 'EXAMDATE', 'DX.bl', 'DX', 'AGE','PTGENDER', 'PTGENDER', 'PTRACCAT', 'APOE4','AV45','ABETA','TAU', 'PTAU', 'Hippocampus', 'WholeBrain', 'Entorhinal', 'Fusiform', 'MidTemp', 'Ventricles')
+
+# Control baseline dataset processing
+# 3 levels of diagnosis DX ('CN', 'Dementia', 'MCI')
+control_ct <- subset(control_bl, DX == 'CN', select = col) # constant control pacients
+
+# Disease baseline dataset processing 
+disease_ct <- subset(disease_bl, DX == 'Dementia' | DX == 'MCI', select=col) # constant disease
+
+# MC baseline dataset processing
+transform_mc_ad <- subset(mc_bl, DX == 'Dementia', select=col) # MC into Dementia
