@@ -10,10 +10,18 @@ library(ggplot2)
 library(gridExtra)
 library(RColorBrewer)
 
+# Setting workpath
+setwd('path')
+
 # ADNI dataset
 data <- adnimerge
 
-# Subset patients based on their base line diagnostic 
+# Florbetapir dataset
+florbetapir <- read.csv('path')
+florbetapir <- subset(florbetapir, select=-VISCODE)  #remove first VISCODE
+names(florbetapir)[2] <- 'VISCODE'  #change name VISCODE2 into VISCODE to merge tables
+
+# Patients' subsets. Based on their baseline diagnostic 
 # 5 levels of diagnosis DX.bl ('CN', 'SMC', 'EMCI', 'LMCI', 'AD')
 control_bl <- subset(data, DX.bl == 'CN' & VISCODE != 'bl')
 disease_bl <- subset(data, DX.bl == 'AD' & VISCODE != 'bl')
@@ -25,9 +33,12 @@ col <- c('RID', 'VISCODE', 'EXAMDATE', 'DX.bl', 'DX', 'AGE','PTGENDER', 'PTGENDE
 # Control baseline dataset processing
 # 3 levels of diagnosis DX ('CN', 'Dementia', 'MCI')
 control_ct <- subset(control_bl, DX == 'CN', select = col) # constant control pacients
+CN <- merge(control_ct, florbetapir, by = c('RID','VISCODE'), all.x=TRUE, no.dups=TRUE) # CONTROL DATASET
 
 # Disease baseline dataset processing 
 disease_ct <- subset(disease_bl, DX == 'Dementia' | DX == 'MCI', select=col) # constant disease
+AD <- merge(disease_ct, florbetapir, by = c('RID','VISCODE'), all.x=TRUE, no.dups=TRUE) # CONSTANT DISEASE DATASET
 
 # MC baseline dataset processing
 transform_mc_ad <- subset(mc_bl, DX == 'Dementia', select=col) # MC into Dementia
+MCtoAD <- merge(transform_mc_ad, florbetapir, by = c('RID','VISCODE'), all.x=TRUE, no.dups=TRUE) # MC into DISEASE 
