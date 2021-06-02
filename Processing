@@ -17,3 +17,8 @@ for (column in names(p)) {
 print(lista)
 
 #if there is any column with only NaN values we have to remove it
+
+# Save files
+write.csv(CN, 'control_processed.csv', row.names=FALSE)
+write.csv(CN, 'disease_processed.csv', row.names=FALSE)
+write.csv(CN, 'converted_processed.csv', row.names=FALSE)
