@@ -7,7 +7,7 @@ CN <- na.replace(CN, 0)
 AD <- na.replace(AD, 0)
 MC <- na.replace(MC, 0)
 
-# Any column with all NaN value?
+# Any column with only NaN values?
 lista <- list()
 
 for (column in names(p)) {
