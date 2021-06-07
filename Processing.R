@@ -1,0 +1,31 @@
+"""
+This scripts reads previously created datasets and process them to remove NaN values
+"""
+# Set path to data files
+path = ''
+
+# Read CSV files
+CN <- read.csv(path/control.csv)
+AD <- read.csv(path/disease.csv)
+MC <- read.csv(path/converted.csv)
+
+# Processing - remove NaN values
+CN <- na.replace(CN, 0)
+AD <- na.replace(AD, 0)
+MC <- na.replace(MC, 0)
+
+# Any column with only NaN values?
+lista <- list()
+
+for (column in names(p)) {
+  len <- length(lista)
+  if (sum(is.na(p[column])) == length(p)) {lista[[len+1]] <- column}}
+  
+print(lista)
+
+#if there is any column with only NaN values we have to remove it
+
+# Save files
+write.csv(CN, 'control_processed.csv', row.names=FALSE)
+write.csv(CN, 'disease_processed.csv', row.names=FALSE)
+write.csv(CN, 'converted_processed.csv', row.names=FALSE)
