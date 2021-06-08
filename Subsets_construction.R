@@ -11,19 +11,21 @@ library(gridExtra)
 library(RColorBrewer)
 
 # Setting workpath
-path = getwd()
+path <- getwd()
 setwd(path)
-message = cat("Set work path for dir: ", path)
+message <- cat("Set work path for dir: ", file.path(path))
 print(message)
 
 # ADNI dataset
 data <- adnimerge
-print("\nADNI merge dataset content:")
-print(head(data))
+# print("ADNI merge dataset content:")
+# print(head(data))
 
 # Florbetapir dataset
 # File to read?
-florbetapir <- read.csv(path)
+av45_file <- file.path(path, 'data', "UCBERKELEYAV45_01_14_21.csv")
+print(av45_file)
+florbetapir <- read.csv(av45_file)
 florbetapir <- subset(florbetapir, select=-VISCODE)  #remove first VISCODE
 names(florbetapir)[2] <- 'VISCODE'  #change name VISCODE2 into VISCODE to merge tables
 
@@ -50,6 +52,12 @@ transform_mc_ad <- subset(mc_bl, DX == 'Dementia', select=col) # MC into Dementi
 MCtoAD <- merge(transform_mc_ad, florbetapir, by = c('RID','VISCODE'), all.x=TRUE, no.dups=TRUE) # MC into DISEASE 
 
 # Save files
-write.csv(CN, path/control.csv, row.names=FALSE)
-write.csv(AD, path/disease.csv, row.names=FALSE)
-write.csv(MCtoAD, path/converted.csv, row.names=FALSE)
+controls_file <- file.path(path, 'data', 'control.csv')
+disease_file <- file.path(path, 'data', 'disease.csv')
+converted_file <- file.path(path, 'data', 'converted.csv')
+
+print("Writting data files:")
+print(controls_file)
+write.csv(CN, controls_file, row.names=FALSE)
+write.csv(AD, disease_file, row.names=FALSE)
+write.csv(MCtoAD, converted_file, row.names=FALSE)
